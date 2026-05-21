@@ -1,0 +1,5 @@
+export const SUPABASE_URL = 'https://your-project-id.supabase.co'
+export const SUPABASE_ANON_KEY = 'your-anon-key-here'
+export const APP_NAME = 'MicroFin'
+export const CURRENCY_SYMBOL = 'GH₵'
+export const CURRENCY = 'GHS'
