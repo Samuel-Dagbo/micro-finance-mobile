@@ -61,18 +61,21 @@ export default function OtpScreen({ route, navigation }: any) {
     setLoading(true)
     const { error } = await supabase.auth.updateUser({ password })
     setLoading(false)
-    if (error) Alert.alert('Error', error.message)
-    else
+    if (error) {
+      Alert.alert('Error', error.message)
+    } else {
       Alert.alert('Success', 'Account activated!', [
         {
           text: 'OK',
-          onPress: () =>
+          onPress: () => {
             navigation.reset({
               index: 0,
               routes: [{ name: 'Main' }],
-            }),
+            })
+          },
         },
       ])
+    }
   }
 
   return (

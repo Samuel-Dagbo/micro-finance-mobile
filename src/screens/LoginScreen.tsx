@@ -29,7 +29,14 @@ export default function LoginScreen() {
     setLoading(true)
     const { data, error } = await signIn(email, password)
     setLoading(false)
-    if (error) Alert.alert('Login Failed', error.message)
+    if (error) {
+      Alert.alert('Login Failed', error.message)
+    } else if (data?.user) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      })
+    }
   }
 
   return (

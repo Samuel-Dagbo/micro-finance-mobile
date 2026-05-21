@@ -4,13 +4,25 @@ import * as SecureStore from 'expo-secure-store'
 
 const ExpoSecureStoreAdapter = {
   getItem: async (key: string) => {
-    return await SecureStore.getItemAsync(key)
+    try {
+      return await SecureStore.getItemAsync(key)
+    } catch {
+      return null
+    }
   },
   setItem: async (key: string, value: string) => {
-    await SecureStore.setItemAsync(key, value)
+    try {
+      await SecureStore.setItemAsync(key, value)
+    } catch (error) {
+      console.error('SecureStore setItem error:', error)
+    }
   },
   removeItem: async (key: string) => {
-    await SecureStore.deleteItemAsync(key)
+    try {
+      await SecureStore.deleteItemAsync(key)
+    } catch (error) {
+      console.error('SecureStore removeItem error:', error)
+    }
   },
 }
 
@@ -20,5 +32,6 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
+    flowType: 'pkce',
   },
 })

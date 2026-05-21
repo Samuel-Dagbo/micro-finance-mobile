@@ -56,11 +56,19 @@ export async function getCurrentUser() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const { data } = await supabase
+  const { data: customerData } = await supabase
     .from('customers')
     .select('*, branches(name)')
     .eq('user_id', user.id)
     .single()
 
-  return data
+  if (customerData) return customerData
+
+  const { data: userData } = await supabase
+    .from('users')
+    .select('*, branches(name, code)')
+    .eq('id', user.id)
+    .single()
+
+  return userData
 }

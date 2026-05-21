@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/services/supabase'
 import { getCurrentUser } from '@/services/auth'
 
@@ -20,10 +20,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
+  const loadUser = useCallback(async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setUser(null)
+        return
+      }
+      const customer = await getCurrentUser()
+      setUser(customer)
+    } catch {
+      setUser(null)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     loadUser()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setUser(null)
+        setLoading(false)
+        return
+      }
       if (session?.user) {
         const customer = await getCurrentUser()
         setUser(customer)
@@ -34,25 +55,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
-
-  async function loadUser() {
-    try {
-      const customer = await getCurrentUser()
-      setUser(customer)
-    } catch {
-      setUser(null)
-    } finally {
-      setLoading(false)
-    }
-  }
+  }, [loadUser])
 
   async function refreshUser() {
     await loadUser()
   }
 
   async function signOut() {
-    await supabase.auth.signOut()
+    try {
+      await supabase.auth.signOut()
+    } catch {
+      // Ignore errors during sign out
+    }
     setUser(null)
   }
 
