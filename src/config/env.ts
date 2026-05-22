@@ -1,5 +1,5 @@
-export const SUPABASE_URL = 'https://your-project-id.supabase.co'
-export const SUPABASE_ANON_KEY = 'your-anon-key-here'
+export const SUPABASE_URL = 'https://qagpgmnbmzwbsjthnght.supabase.co'
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhZ3BnbW5ibXp3YnNqdGhuZ2h0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNTk0NjQsImV4cCI6MjA5NDkzNTQ2NH0.nDMGBCKhFBbP-3ZiETSqAHj5n3X-OYa_8T0B5mfPp6Y'
 export const APP_NAME = 'MicroFin'
 export const CURRENCY_SYMBOL = 'GH₵'
 export const CURRENCY = 'GHS'
